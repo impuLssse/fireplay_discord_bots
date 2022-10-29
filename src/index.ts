@@ -1,8 +1,16 @@
 
-
 //  выгружаем наши сервисы
-import * as service from './services/'
+import { ApiMonster } from './services'
+import { cfg } from './configs'
 
-//  вызываем бота, которые выполняет функции запросов
-service.bot
 
+export function classic () {
+    new ApiMonster (cfg.$classic.name, cfg.$classic.token.server, cfg.$classic.token.discord)
+}
+
+export function mirage () {
+    new ApiMonster (cfg.$mirage.name, cfg.$mirage.token.server, cfg.$mirage.token.discord)
+}
+
+classic()
+mirage()
