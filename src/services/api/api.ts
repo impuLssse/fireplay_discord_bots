@@ -2,7 +2,6 @@ import discord_token, { Client, GatewayIntentBits, ActivityType, ButtonStyle } f
 import { Api } from '@iwonz/myarena-ru-nodejs-api'
 import colors from 'colors'
 
-import { cfg } from '../../configs'
 
 export class ApiMonster {
     protected name: string
