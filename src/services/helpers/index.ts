@@ -1,1 +1,1 @@
-export * from './online_validation'
+export * from './helper.online-valid'

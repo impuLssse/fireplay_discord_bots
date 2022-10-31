@@ -1,4 +1,4 @@
-import discord_token, { Client, GatewayIntentBits, ActivityType, ButtonStyle } from 'discord.js'
+import discord_token, { Client, GatewayIntentBits, ActivityType, ButtonStyle, CommandInteractionOptionResolver } from 'discord.js'
 import { Api } from '@iwonz/myarena-ru-nodejs-api'
 import colors from 'colors'
 
@@ -40,13 +40,17 @@ export class ApiMonster {
             console.log(err)
         }
     }
-    
+
     protected async presence (): Promise <void | undefined> {
+        const players = (await this.server.getStatus()).data.s.players
+        const playersmax = (await this.server.getStatus()).data.s.playersmax
+        const map = (await this.server.getStatus()).data.s.map.toUpperCase()
+
         try {
             this.client.user?.setPresence({
                 activities: [{
-                    name: `${ (await this.server.getStatus()).data.s.players }/${ (await this.server.getStatus()).data.s.playersmax } 
-                    on ${ (await this.server.getStatus()).data.s.map.toUpperCase() }`, 
+                    name: `${ players }/${ playersmax }
+                    on ${ map }`,
                     type: ActivityType.Playing,
                 }]
             })
@@ -56,7 +60,7 @@ export class ApiMonster {
             console.log(colors.red(`${this.name} ➤ presence updating failed`))
             console.log(err)
         }
-        
+
         console.log(colors.bold.green(`⭯`), colors.green(`|`), colors.green(`${this.name} ➤ `), colors.white(`query data success updated`))
     }
     
@@ -65,3 +69,4 @@ export class ApiMonster {
         setInterval( () => this.presence(), 7000)
     }
 }
+

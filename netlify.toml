@@ -1,0 +1,2 @@
+[context.production]
+  command = "npx --yes dotenv-vault@latest pull --dotenvMe $PRODUCTION_DOTENV_IT && npm run build"
