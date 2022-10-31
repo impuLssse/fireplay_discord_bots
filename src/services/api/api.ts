@@ -5,16 +5,18 @@ import colors from 'colors'
 
 export class ApiMonster {
     protected name: string
-    protected server!: Api
     protected server_token: string
     protected discord_token: string
+    protected server!: Api
     protected client: Client = new Client({ intents: [ GatewayIntentBits.Guilds ] })
 
+    
     constructor (name: string, server_token: string, discord_token: string) {
         this.name = name
         this.server_token = server_token
         this.discord_token = discord_token
 
+        this.regApiServer()
         this.regApiDiscord()
     }
 
@@ -26,31 +28,40 @@ export class ApiMonster {
 
     protected regApiDiscord (): void | undefined {
         try {
+            this.client.once('ready', c => {
+                console.log(colors.bold.red(`↑`), colors.red(`|`), colors.red(`${this.name} ➤ `), colors.white(`start running a ${c.user.tag}`))
+            })
+            
             this.client.login(this.discord_token)
             this.client.user?.setStatus('online')
 
-            this.server = this.regApiServer()
             this.update()
         } catch (err) {
             console.log(err)
         }
     }
     
-    protected async presence (): Promise <void> {
+    protected async presence (): Promise <void | undefined> {
+        try {
+            this.client.user?.setPresence({
+                activities: [{
+                    name: `${ (await this.server.getStatus()).data.s.players }/${ (await this.server.getStatus()).data.s.playersmax } 
+                    on ${ (await this.server.getStatus()).data.s.map.toUpperCase() }`, 
+                    type: ActivityType.Playing,
+                }]
+            })
+
+
+        } catch (err) {
+            console.log(colors.red(`${this.name} ➤ presence updating failed`))
+            console.log(err)
+        }
         
-        await this.client.user?.setPresence({
-            activities: [{
-                name: `${ (await this.server.getStatus()).data.s.players }/${ (await this.server.getStatus()).data.s.playersmax } 
-                on ${ (await this.server.getStatus()).data.s.map }`, 
-                type: ActivityType.Playing,
-            }]
-        })
-            
-        console.log(colors.magenta(`[${this.name}] data success updated !`))
+        console.log(colors.bold.green(`⭯`), colors.green(`|`), colors.green(`${this.name} ➤ `), colors.white(`query data success updated`))
     }
     
     protected update (): void {
         //  вызываем метод в котором лежат запросы
-        setInterval( () => this.presence(), 6000)
+        setInterval( () => this.presence(), 7000)
     }
 }
