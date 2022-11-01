@@ -13,6 +13,7 @@
     "discord-rpc": "^4.0.1",
     "discord.js": "^14.6.0",
     "dotenv": "^16.0.3",
+    "dotenv-vault": "^1.16.3",
     "nodemon": "^2.0.20",
     "rimraf": "^3.0.2",
     "ts-node": "^10.9.1",
